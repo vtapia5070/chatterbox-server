@@ -11,10 +11,12 @@ this file and include it in basic-server.js so that it actually works.
 *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html.
 
 **************************************************************/
+var urlParser = require('url');
 var messages = [];
 var requestHandler = function(request, response) {
   console.log("Serving request type " + request.method + " for url " + request.url);
   statusCode = getStatusCode(request.url, request.method);
+  console.log(statusCode);
   var headers = defaultCorsHeaders;
   response.writeHead(statusCode, headers);
   
@@ -29,7 +31,6 @@ var requestHandler = function(request, response) {
     return;
   }
   response.end();
-
 };
 
 function handleMessageAndRoom (response, request, statuscode){
@@ -54,7 +55,7 @@ function handleMessageAndRoom (response, request, statuscode){
       request.on('data', function(data){
         // 'data' += data
         var msg = JSON.parse(data);
-        msg.objectId = Math.floor(Math.random() * 99999);
+        //msg.objectId = Math.floor(Math.random() * 99999);
         messages.push(msg);
       });
       response.end();
@@ -66,7 +67,7 @@ function handleMessageAndRoom (response, request, statuscode){
       request.on('data', function(data){
         // 'data' += data
         var msg = JSON.parse(data);
-        msg.objectId = Math.floor(Math.random() * 99999);
+        //msg.objectId = Math.floor(Math.random() * 99999);
         msg.roomname = request.url.substring(9);
         messages.push(msg);
       });
@@ -76,7 +77,9 @@ function handleMessageAndRoom (response, request, statuscode){
 }
 //var result = JSON.parse(ajaxOptions.data);
 function getStatusCode(url, method){
-  if(url === '/classes/messages' || url.substring(0, 13) === '/classes/room'){
+  console.log(url);
+  if(url.substring(0, 17) === '/classes/messages' || url.substring(0, 13) === '/classes/room'){
+
     if (method === 'GET'){
       return 200;
     } else {
@@ -84,6 +87,7 @@ function getStatusCode(url, method){
       return 201;
     }
   } else {
+
     return 404;
   }
 }
@@ -94,5 +98,6 @@ var defaultCorsHeaders = {
   "access-control-allow-origin": "*",
   "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
   "access-control-allow-headers": "content-type, accept",
-  "access-control-max-age": 10 // Seconds.
+  "access-control-max-age": 10, // Seconds.
+  "Content-Type": "application/json"
 };

@@ -15,7 +15,7 @@ var app = {
   send: function(message){
 
     $.ajax({
-      url: 'https://api.parse.com/1/classes/chatterbox',
+      url: 'http://127.0.0.1:3000/classes/messages',
       type: 'POST',
       data: JSON.stringify(message),
       contentType: 'application/json',
@@ -30,8 +30,9 @@ var app = {
 
   fetch: function(room){
     $.ajax({
-      url: 'https://api.parse.com/1/classes/chatterbox',
+      url: 'http://127.0.0.1:3000/classes/messages',
       type: 'GET',
+      //
       data: {order: '-createdAt'},
       contentType: 'application/json',
       success: function (data) {
@@ -57,7 +58,7 @@ var app = {
   addMessage: function(data, other){
     var message = JSON.stringify(data.text);
     var username = data.username;
-    var room = data.room || "General";
+    var room = data.roomname || "General";
     if (other){
       $('#chats').append('<div class="chat '+room+'"><div class="username" data-name="'+username+'">'+username+'</div><div class="text">'+ message + '</div><div class=room "'+room+'">'+room+'</div></div>');
     } else {
