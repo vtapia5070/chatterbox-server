@@ -37,10 +37,10 @@ var app = {
       contentType: 'application/json',
       success: function (data) {
         for(var i = 0; i < data.results.length; i++) {
-          if (_.contains(roomList, data.results[i].room && data.results[i].room === currentRoom)) {
+          if (_.contains(roomList, data.results[i].roomname && data.results[i].roomname === currentRoom)) {
             app.addMessage(data.results[i], false);
           }
-          else if (data.results[i].room === currentRoom) {
+          else if (data.results[i].roomname === currentRoom) {
             app.addMessage(data.results[i], true);
           }
         }
@@ -58,11 +58,13 @@ var app = {
   addMessage: function(data, other){
     var message = JSON.stringify(data.text);
     var username = data.username;
-    var room = data.roomname || "General";
+    var roomname = data.roomname || "General";
     if (other){
-      $('#chats').append('<div class="chat '+room+'"><div class="username" data-name="'+username+'">'+username+'</div><div class="text">'+ message + '</div><div class=room "'+room+'">'+room+'</div></div>');
+      console.log('other is true, so doing this...');
+      $('#chats').append('<div class="chat '+roomname+'"><div class="username" data-name="'+username+'">'+username+'</div><div class="text">'+ message + '</div><div class=room "'+roomname+'">'+roomname+'</div></div>');
     } else {
-      $('#chats').append('<div class="chat Other"><div class="username" data-name="'+username+'">'+username+'</div><div class="text">'+ message + '</div><div class=room "'+room+'">'+room+'</div></div>');
+      console.log('other is not true');
+      $('#chats').append('<div class="chat Other"><div class="username" data-name="'+username+'">'+username+'</div><div class="text">'+ message + '</div><div class=room "'+roomname+'">'+roomname+'</div></div>');
     }
     $( ".username" ).click(function() {
       var target = $(this).data("name");
@@ -80,7 +82,7 @@ var app = {
     var message = {
       username: _.escape(name),
       text: _.escape($(".message").val()),
-      room: value
+      roomname: value
     };
     app.send(message);
   }
